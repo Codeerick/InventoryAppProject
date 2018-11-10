@@ -1,19 +1,18 @@
 package com.example.android.inventoryappproject;
 
 import android.Manifest;
-import android.content.ContentUris;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -21,17 +20,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.inventoryappproject.R;
 import com.example.android.inventoryappproject.data.InventoryContract;
-import com.example.android.inventoryappproject.data.InventoryCursorAdapter;
-
 
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -63,6 +59,12 @@ public class EditorActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        mNameEditText = (EditText) findViewById(R.id.edit_name);
+        mSupplierEditText = (EditText) findViewById(R.id.edit_price);
+        mPhoneEditText = (EditText) findViewById(R.id.edit_quantity);
+        mPriceEditText = (EditText) findViewById(R.id.edit_suppliername);
+        mQuantityEditText = (EditText) findViewById(R.id.supplierphone);
+
         Intent intent = getIntent();
         mCurrentInventoryUri = intent.getData();
 
@@ -76,7 +78,7 @@ public class EditorActivity extends AppCompatActivity implements
             setTitle(getString(R.string.add_inventory_data));
 
 
-            getSupportLoaderManager().initLoader(EXISTING_INVENTORY_LOADER, null, this);
+            getSupportLoaderManager().initLoader(EXISTING_INVENTORY_LOADER, null, (android.support.v4.app.LoaderManager.LoaderCallbacks<Object>) this);
 
             String quantityString = mQuantityEditText.getText().toString().trim();
 
@@ -95,11 +97,6 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_LONG).show();
             }
 
-            mNameEditText = (EditText) findViewById(R.id.edit_name);
-            mSupplierEditText = (EditText) findViewById(R.id.edit_price);
-            mPhoneEditText = (EditText) findViewById(R.id.edit_quantity);
-            mPriceEditText = (EditText) findViewById(R.id.edit_suppliername);
-            mQuantityEditText = (EditText) findViewById(R.id.supplierphone);
 
             mNameEditText.setOnTouchListener(mTouchListener);
             mPriceEditText.setOnTouchListener(mTouchListener);
@@ -388,7 +385,7 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLoadFinished (Loader < Cursor > loader, Cursor cursor){
+    public void onLoadFinished (Loader< Cursor > loader, Cursor cursor){
 
         if (cursor == null || cursor.getCount() < 1) {
             return;
