@@ -19,8 +19,8 @@ public class InventoryContantProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.PATH_WALMART, INVENTORY);
-        sUriMatcher.addURI(InventoryContract.AUTHORITY, InventoryContract.PATH_WALMART+"/#",INVENTORY_WITH_ID);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_WALMART, INVENTORY);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_WALMART+"/#",INVENTORY_WITH_ID);
     }
 
     public InventoryContantProvider() {
@@ -90,23 +90,20 @@ public class InventoryContantProvider extends ContentProvider {
         // Write URI matching code to identify the match for the tasks directory
         int match = sUriMatcher.match(uri);
         Uri returnUri; // URI to be returned
-
         switch (match) {
-            case INVENTORY:
-                // Insert new values into the database
-                // Inserting values into tasks table
-                long id = db.insert(InventoryContract.InventoryEntry.TABLE_NAME, null, contentValues);
-                if ( id > 0 ) {
-                    returnUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, id);
-                } else {
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
-                }
+            // Handle the single item case, recognized by the ID included in the URI path
+            case INVENTORY_WITH_ID:
+                // Get the task ID from the URI path
+                String id = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+             db.delete(InventoryContract.InventoryEntry.TABLE_NAME, "id=?", new String[]{id});
                 break;
-            // Set the value for the returnedUri and write the default case for unknown URI's
-            // Default case throws an UnsupportedOperationException
+            case INVENTORY:
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+
 
         // Notify the resolver if the uri has been changed, and return the newly inserted URI
         getContext().getContentResolver().notifyChange(uri, null);
