@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -43,18 +44,24 @@
         </LinearLayout>
 
 
+
         <RelativeLayout
             android:id="@+id/Layout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center">
-
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/supplier_info" />
             <!-- minus button-->
             <ImageButton
                 android:id="@+id/minusButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:layout_marginLeft="@dimen/super_big"
                 android:contentDescription="@string/minus_button"
                 android:src="@drawable/baseline_minimize_24"/>
 
@@ -94,12 +101,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_supplier_name"
+                android:layout_marginLeft="@dimen/super_big"
                 android:inputType="textCapWords"
                 android:maxLength="20" />
             <EditText
                 android:id="@+id/supplierphone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/super_big"
                 android:layout_below="@id/edit_suppliername"
                 android:hint="@string/hint_supplier_phone"
                 android:inputType="number"
@@ -116,6 +125,7 @@
                 android:contentDescription="@string/phone_image"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
+                android:layout_marginLeft="@dimen/super_big"
                 android:src="@drawable/baseline_call_24" />
 
             <android.support.design.widget.FloatingActionButton
